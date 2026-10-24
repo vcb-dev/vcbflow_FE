@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>VCB Video Agent</title>
+  <script>
+    var hash = location.hash;
+    if (!hash || hash === "#") hash = location.pathname.indexOf("admin") >= 0 ? "#/content" : "#/studio";
+    location.replace("http://127.0.0.1:5173/" + hash);
+  </script>
+</head>
+<body></body>
+</html>

@@ -1,0 +1,122 @@
+/* VCB Video Agent design tokens (approved redesign): graphite + jewellery gold, light & dark.
+   Every page loads this first; admin.css and the editor CSS only use these variables. */
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E0F11; --rail: #0B0C0E; --pane: #15161A; --pane-2: #1B1C20; --pane-3: #26282E; --stage: #0B0C0E;
+  --line: #26282D; --line-2: #33363C; --line-soft: #1F2125;
+  --ink: #ECEAE6; --ink-2: #C9C6C0; --muted: #9C9A94; --dim: #6E6C67;
+  --accent: #D4AF5A; --accent-ink: #1A1407; --accent-soft: rgba(212,175,90,.14); --accent-hover: #E0BE6E;
+  --active-bg: #2A2416; --chip-bg: #1E2024; --thumb: #1F2024; --field: #1B1C20;
+  --ok: #5BC48A; --ok-soft: #1C3326; --warn: #E0965A; --warn-soft: #3A2617; --bad: #F08A80; --bad-soft: #3A1E1C; --ai: #7FB0DE;
+  /* footage identity: product / HuyK / outro / AI / collected / missing */
+  --real: #3E6A96; --huyk: #A85E2A; --outro: #7A5CB3; --gen: #2A9D9A; --collected: #B98A2A; --missing: #E66767;
+  --gold: #D4AF5A;
+  --t-text: #4A4560; --t-vo: #6E5A2C; --t-music: #2A3A2E; --t-sfx: #2E3B4C; --t-logo: #5A4E22;
+  --tagA1-bg: #3A2131; --tagA1: #F0B3D3; --tagA2-bg: #1D3326; --tagA2: #9CDDB5; --tagA3-bg: #2C2340; --tagA3: #C9B3F0;
+  --tagA4-bg: #1E3348; --tagA4: #A9CBEA; --tagA5-bg: #3A2E17; --tagA5: #E8C988;
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --sans: "Be Vietnam Pro", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F4F3F0; --rail: #EDEBE6; --pane: #FFFFFF; --pane-2: #F7F6F3; --pane-3: #ECEAE5; --stage: #E9E7E2;
+  --line: #E2DFD8; --line-2: #D3CFC6; --line-soft: #EFECE6;
+  --ink: #17171A; --ink-2: #33322F; --muted: #5E5C57; --dim: #8A877F;
+  --accent: #8C6A1C; --accent-ink: #FFFFFF; --accent-soft: rgba(140,106,28,.12); --accent-hover: #7A5C16;
+  --active-bg: #F3EAD6; --chip-bg: #F0EEE9; --thumb: #ECE8DF; --field: #FFFFFF;
+  --ok: #2E7D4F; --ok-soft: #E3F1E8; --warn: #9A4F1C; --warn-soft: #F6E7DA; --bad: #B3261E; --bad-soft: #F8E1DF; --ai: #2F5F8F;
+  --real: #3F6E9B; --huyk: #B4642B; --outro: #6B4FA0; --gen: #23807D; --collected: #9C7417; --missing: #C2413A;
+  --gold: #8C6A1C;
+  --t-text: #D9D3EC; --t-vo: #EADBB4; --t-music: #D5E6D8; --t-sfx: #D7E0EC; --t-logo: #EDE3C2;
+  --tagA1-bg: #F5E6EF; --tagA1: #8A2E5F; --tagA2-bg: #E6F2EA; --tagA2: #256A42; --tagA3-bg: #EFE8F8; --tagA3: #5B3A92;
+  --tagA4-bg: #E4EEF8; --tagA4: #24507A; --tagA5-bg: #F6ECD9; --tagA5: #7A5410;
+  --shadow: 0 12px 30px rgba(40,30,10,.12);
+}
+body { background: var(--bg); color: var(--ink); }
+
+/* shared icon rail (Studio + admin) */
+.rail { width: 64px; flex: 0 0 64px; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 14px 0; background: var(--rail); border-right: 1px solid var(--line); z-index: 20; }
+.rail .mark { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
+  font: 700 15px var(--sans); margin-bottom: 14px; text-decoration: none; }
+.rail a.ri, .rail button.ri { position: relative; width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; color: var(--muted);
+  background: transparent; border: 0; cursor: pointer; text-decoration: none; }
+.rail .ri:hover { background: var(--chip-bg); color: var(--ink); }
+.rail .ri.on { background: var(--active-bg); color: var(--accent); }
+.rail .ri .nb { position: absolute; top: 5px; right: 4px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent);
+  color: var(--accent-ink); font: 700 10px var(--sans); display: grid; place-items: center; }
+.rail .ri .nb:empty, .rail .ri .nb[data-n="0"] { display: none; }
+.rail .ri::after { content: attr(data-tip); position: absolute; left: 52px; top: 50%; transform: translateY(-50%); white-space: nowrap;
+  background: var(--ink); color: var(--bg); font: 500 12px var(--sans); padding: 5px 9px; border-radius: 6px; opacity: 0; pointer-events: none;
+  transition: opacity .12s; }
+.rail .ri:hover::after, .rail .ri:focus-visible::after { opacity: 1; }
+.rail .grow { flex: 1; }
+.tabbar { display: none; }
+@media (max-width: 700px) {
+  .rail { display: none !important; }
+  body { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); background: var(--pane); border-top: 1px solid var(--line); }
+  .tabbar .tb { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 52px; justify-content: center;
+    color: var(--muted); font: 600 11px var(--sans); text-decoration: none; border-radius: 10px; }
+  .tabbar .tbi { width: 48px; height: 28px; border-radius: 14px; display: grid; place-items: center; }
+  .tabbar .tb.on { color: var(--accent); } .tabbar .tb.on .tbi { background: var(--active-bg); }
+  .tabbar .nb { position: absolute; top: 2px; left: 50%; margin-left: 8px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
+    background: var(--accent); color: var(--accent-ink); font: 700 10px var(--sans); display: grid; place-items: center; }
+  .tabbar .nb:empty, .tabbar .nb[data-n="0"] { display: none; }
+}
+
+/* shared primitives */
+.seg { display: inline-flex; padding: 3px; border-radius: 9px; background: var(--chip-bg); gap: 2px; flex-wrap: wrap; }
+.seg > button { min-height: 32px; padding: 0 12px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font: 600 13px var(--sans); cursor: pointer; }
+.seg > button[aria-selected="true"], .seg > button[aria-pressed="true"], .seg > button.on { background: var(--pane); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.fam { display: inline-block; font: 700 10px var(--sans); padding: 2px 6px; border-radius: 5px; letter-spacing: .02em; }
+.fam.A1 { background: var(--tagA1-bg); color: var(--tagA1); } .fam.A2 { background: var(--tagA2-bg); color: var(--tagA2); }
+.fam.A3 { background: var(--tagA3-bg); color: var(--tagA3); } .fam.A4 { background: var(--tagA4-bg); color: var(--tagA4); }
+.fam.A5 { background: var(--tagA5-bg); color: var(--tagA5); }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 4px; background: var(--dim); flex: none; }
+.dot.ok { background: var(--ok); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); } .dot.run { background: var(--ai); } .dot.accent { background: var(--accent); }
+.eyebrow { font: 600 11px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Scrollbars: hidden on touch screens (swipe still scrolls); on desktop a thin bar that only shows on hover. */
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; -webkit-tap-highlight-color: transparent; }
+*:hover { scrollbar-color: color-mix(in srgb, var(--muted, #888) 45%, transparent) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; background: transparent; }
+*::-webkit-scrollbar-thumb { background: transparent; border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+*:hover::-webkit-scrollbar-thumb { background-color: color-mix(in srgb, var(--muted, #888) 45%, transparent); }
+*::-webkit-scrollbar-corner { background: transparent; }
+@media (hover: none), (max-width: 700px) { * { scrollbar-width: none; } *::-webkit-scrollbar { display: none; } }
+/* system language switch (rail, under light/dark) */
+.rail .ri.lang-btn { font: 600 12px var(--mono, monospace); letter-spacing: .5px; }
+.lang-menu { position: fixed; z-index: 1000; min-width: 168px; padding: 6px; border-radius: 12px; background: var(--pane, #1b1b1b); border: 1px solid var(--line, #333);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35); display: flex; flex-direction: column; gap: 2px; }
+.lang-menu button { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--ink, #eee); cursor: pointer; font-size: 13px; text-align: left; }
+.lang-menu button b { font: 600 11px var(--mono, monospace); color: var(--muted, #999); width: 22px; }
+.lang-menu button:hover { background: var(--chip-bg, #2a2a2a); }
+.lang-menu button[aria-checked="true"] { color: var(--accent, #d1ad62); }
+.lang-menu button[aria-checked="true"] b { color: var(--accent, #d1ad62); }
+
+/* ---- working states: robot for loading placeholders, spinner for "Đang …" buttons / chips, progress bars ---- */
+.vbot { display: block; width: 96px; height: 96px; margin: 0 auto 8px; background: url(/web/img/bot.svg) center / contain no-repeat; }
+.vbot.sm { width: 44px; height: 44px; margin: 0; flex: none; }
+.is-busy::before { content: ""; display: inline-block; width: .95em; height: .95em; margin-right: .45em; vertical-align: -.14em; flex: none;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: vspin .8s linear infinite; }
+.empty.is-busy, .ph.is-busy { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
+.empty.is-busy::before, .ph.is-busy::before { display: block; width: 92px; height: 92px; margin: 6px auto 6px; border: 0; border-radius: 0;
+  animation: none; background: url(/web/img/bot.svg) center / contain no-repeat; }
+@keyframes vspin { to { transform: rotate(360deg); } }
+/* a screen still fetching its data (its root is empty): the robot in the middle */
+#view > div > div:empty { min-height: 62vh; position: relative; background: url(/web/img/bot.svg) center calc(50% - 18px) / 108px no-repeat; }
+#view > div > div:empty::after { content: "Đang tải dữ liệu…"; position: absolute; left: 0; right: 0; top: calc(50% + 46px); text-align: center; color: var(--muted); font-size: 13px; }
+:root:lang(en) #view > div > div:empty::after { content: "Loading…"; }
+:root:lang(ja) #view > div > div:empty::after { content: "読み込み中…"; }
+:root:lang(th) #view > div > div:empty::after { content: "กำลังโหลด…"; }
+:root:lang(es) #view > div > div:empty::after { content: "Cargando…"; }
+.vprog { height: 8px; border-radius: 4px; background: var(--line, rgba(127,127,127,.25)); overflow: hidden; }
+.vprog > i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .5s linear; position: relative; overflow: hidden;
+  background: linear-gradient(90deg, var(--accent), #E8C66E); }
+.vprog > i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+  transform: translateX(-100%); animation: vshine 1.3s ease-in-out infinite; }
+@keyframes vshine { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .is-busy::before, .vprog > i::after { animation: none; } }
